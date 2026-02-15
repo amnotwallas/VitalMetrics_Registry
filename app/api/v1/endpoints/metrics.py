@@ -60,7 +60,7 @@ def get_kpis(
     KPIs are derived on-the-fly from raw data.
     """
     # set  example goals (feat: implemtent user-specific goals in the future in database)
-    goals = {"steps": 10000, "calories": 2500, "sleep": 8}
+    goals = {"steps": 10000, "calories": 2500, "sleep": 480}  # Example goals for steps, calories, and sleep (in minutes)
     
     kpis = kpi_service.calculate_daily_kpis(
         db=db, user_id=current_user.id, goals=goals
