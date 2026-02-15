@@ -9,6 +9,7 @@ from app.services import kpi_service
 from app.db.session import get_db
 from app.models.metric import User
 from app.security import get_current_active_user
+from typing import Optional
 
 router = APIRouter()
 
@@ -31,8 +32,8 @@ def create_metric(
 def read_metrics(
     *,
     db: Session = Depends(get_db),
-    start_date: datetime = None,
-    end_date: datetime = None,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
     current_user: User = Depends(get_current_active_user)
 ):
     """
@@ -58,7 +59,7 @@ def get_kpis(
     Compute and return daily KPIs for the current user.
     KPIs are derived on-the-fly from raw data.
     """
-    # In a real app, goals would be fetched from a user profile/settings table
+    # set  example goals (feat: implemtent user-specific goals in the future in database)
     goals = {"steps": 10000, "calories": 2500, "sleep": 8}
     
     kpis = kpi_service.calculate_daily_kpis(
