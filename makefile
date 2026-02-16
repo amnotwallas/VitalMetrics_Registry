@@ -1,7 +1,22 @@
-install:
-	pip install -r requirements.txt
+VENV = .venv
+BIN = $(VENV)/bin
 
-run_api:
-	uvicorn app.main:app --reload
+.PHONY: init run clean
 
-## docs http://127.0.0.1:8000/docs
+# initialize the project by creating a virtual environment and installing dependencies
+init: $(VENV)
+	@cp -n .env.example .env || true
+	$(BIN)/pip install -r requirements.txt
+	@echo "✅ Listo. Usa 'make run'"
+
+$(VENV):
+	python3 -m venv $(VENV)
+
+# run api with hot reload
+run:
+	$(BIN)/uvicorn app.main:app --reload
+
+# clean virtual environment and pycache
+clean:
+	rm -rf $(VENV)
+	find . -type d -name "__pycache__" -exec rm -rf {} +
