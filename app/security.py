@@ -31,7 +31,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 # This is a placeholder for a more robust user fetching logic
 from sqlmodel import Session
 from app.db.session import get_db
-from app.models.metric import User
+from app.models.user import User
 from app.repository import user_repository
 
 class TokenData(BaseModel):
