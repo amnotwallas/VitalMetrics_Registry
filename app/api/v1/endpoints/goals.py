@@ -13,7 +13,7 @@ from typing import Optional
 router = APIRouter()
 
 
-@router.post("/goals", response_model=GoalRead, status_code=201)
+@router.post("/", response_model=GoalRead, status_code=201)
 def create_goal(
     *,
     db: Session = Depends(get_db),
@@ -28,7 +28,7 @@ def create_goal(
     )
     return goal
 
-@router.get("/goals", response_model=List[GoalRead])
+@router.get("/", response_model=List[GoalRead])
 def read_goals(
     *,
     db: Session = Depends(get_db),
