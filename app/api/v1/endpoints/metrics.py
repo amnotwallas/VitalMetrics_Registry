@@ -7,9 +7,11 @@ from app.schemas.metric import MetricCreate, MetricRead, KPIResponse
 from app.repository import metric_repository
 from app.services import kpi_service
 from app.db.session import get_db
-from app.models.metric import User
+from app.models.user import User
 from app.security import get_current_active_user
 from typing import Optional
+
+from app.repository import goal_repository
 
 router = APIRouter()
 
@@ -60,9 +62,10 @@ def get_kpis(
     KPIs are derived on-the-fly from raw data.
     """
     # set  example goals (feat: implemtent user-specific goals in the future in database)
-    goals = {"steps": 10000, "calories": 2500, "sleep": 480}  # Example goals for steps, calories, and sleep (in minutes)
-    
+    #goals = {"steps": 10000, "calories": 2500, "sleep": 480}  # Example goals for steps, calories, and sleep (in minutes)
+    goals_list = goal_repository.get_active_goals_by_user(db=db, user_id=current_user.id)
+    goals_dict = {goal.type.value: goal.target_value for goal in goals_list}
     kpis = kpi_service.calculate_daily_kpis(
-        db=db, user_id=current_user.id, goals=goals
+        db=db, user_id=current_user.id, goals=goals_dict
     )
     return kpis
