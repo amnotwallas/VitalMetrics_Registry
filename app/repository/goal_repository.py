@@ -29,7 +29,7 @@ def get_active_by_owner(db: Session, *, user_id: int, current_date: datetime) ->
         select(Goal)
         .where(Goal.user_id == user_id)
         .where(Goal.start_date <= current_date)
-        .where((Goal.end_date >= current_date) | (Goal.end_date == None))
+        .where((Goal.end_date >= current_date) | (Goal.end_date.is_(None)))
         .order_by(Goal.start_date.desc())
     )
     return db.exec(statement).all()
