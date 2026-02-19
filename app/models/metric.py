@@ -1,9 +1,11 @@
 import enum
 from datetime import datetime
-from typing import Optional, List
-
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import Field, Relationship, SQLModel
 
+if TYPE_CHECKING:
+    from app.models.goal import Goal 
+    from app.models.user import User
 
 class MetricType(str, enum.Enum):
     steps = "steps"
@@ -11,27 +13,12 @@ class MetricType(str, enum.Enum):
     sleep = "sleep"
     heart_rate = "heart_rate"
 
-
-class UserBase(SQLModel):
-    email: str = Field(unique=True, index=True)
-    is_active: bool = True
-
-
-class User(UserBase, table=True):
+class Metric(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    hashed_password: str
-    metrics: List["Metric"] = Relationship(back_populates="user")
-
-
-class MetricBase(SQLModel):
     type: MetricType = Field(index=True)
     value: float
     unit: str
     timestamp: datetime = Field(index=True)
-
-
-class Metric(MetricBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    
     user_id: int = Field(foreign_key="user.id", index=True)
-    user: User = Relationship(back_populates="metrics")
-
+    user: "User" = Relationship(back_populates="metrics")
